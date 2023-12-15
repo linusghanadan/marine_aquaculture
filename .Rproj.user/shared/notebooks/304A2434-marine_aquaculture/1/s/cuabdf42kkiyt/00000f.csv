@@ -1,5 +1,0 @@
-"0","# Load bathymetry raster"
-"0","depth <- raster(here(""data/depth.tif""))"
-"0",""
-"0","# Resample the depth data to match the resolution of SST data"
-"0","depth <- resample(depth, mean_sst, method = ""ngb"")"
