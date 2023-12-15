@@ -1,0 +1,5 @@
+"0","# Calculate total suitable area within each EEZ"
+"0","total_suitable_area <- raster::zonal(cell_areas_raster, eez_raster, fun = sum, na.rm = TRUE)"
+"2","Error in h(simpleError(msg, call)) : 
+  error in evaluating the argument 'x' in selecting a method for function 'zonal': object 'cell_areas_raster' not found
+"
