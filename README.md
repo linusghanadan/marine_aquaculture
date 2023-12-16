@@ -5,6 +5,7 @@ This analysis seeks to build on knowledge regarding the potential for marine aqu
 ## Repository contents
     marine_aquaculture
     │   README.md
+    │   .gitignore
     │   .Rmd
     │   .Rproj   
     │   .html
