@@ -3,9 +3,11 @@
 This analysis seeks to build on knowledge regarding the potential for marine aquaculture expansion in the four Exclusive Economic Zones (EEZs) adjacent to the U.S. West Coast. Using raster data on mean sea surface temperature and depth, I’ll estimate the total and percent area within each of these four EEZs that would be suitable for oyster aquaculture. After visualizing oyster suitability, I’ll create a generalized model that can be used for any species based on their ideal temperature and depth ranges.
 
 ## Repository contents
-
-│   README.md
-│   Rmd/Proj files    
+    marine_aquaculture
+    │   README.md
+    │   .Rmd
+    │   .Rproj   
+    │   .html
 
 ## Datasets
 1. Sea surface temperature TIF files
