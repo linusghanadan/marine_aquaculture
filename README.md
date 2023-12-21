@@ -7,8 +7,7 @@ This analysis seeks to build on knowledge regarding the potential for marine aqu
     │   README.md
     │   .gitignore
     │   .Rmd
-    │   .Rproj   
-    │   .html
+    │   .Rproj
 
 ## Datasets
 1. Sea surface temperature TIF files
