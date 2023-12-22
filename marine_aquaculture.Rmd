@@ -12,7 +12,7 @@ knitr::opts_chunk$set(include = TRUE, message = FALSE, warning = FALSE)
 
 ## Purpose
 
-Marine aquaculture has the potential to be a substantial part of the solution to meeting the future demand for protein-rich food while simultaneously ensuring environmental sustainability (Costello et al. 2020). Increases in the demand for seafood have already resulted in an industry shift from wild fisheries to terrestrial aquaculture, with farmed seafood products currently making up about 50% of global seafood supply. However, concerns about the sustainability of further expanding terrestrial aquaculture suggest that increasing the development of marine aquaculture farms might play an important role in a comprehensive solution.
+Marine aquaculture has the potential to be an important solution to meet the future demand for protein-rich food while simultaneously ensuring environmental sustainability (Costello et al. 2020). Increases in the demand for seafood have already resulted in an industry shift from wild fisheries to terrestrial aquaculture, with farmed seafood products currently making up about 50% of the global seafood supply. However, concerns about the sustainability of further expanding terrestrial aquaculture suggest that increasing the development of marine aquaculture farms might play a substantial role in a comprehensive solution.
 
 Furthermore, the U.S. West Coast represents an area where such marine aquaculture expansion could take place. In fact, the State of Washington currently leads the nation in marine aquaculture development. From 2005 to 2018, Washington generated over $200 million from these sea-based farms, about 40% of nationwide revenue during that same period (Froehlich et al. 2022).
 
@@ -34,7 +34,7 @@ library(spData)
 
 ## Read in data
 #### Sea surface temperature TIF files
-For temperature, we will use a stacked one kilometer grid cell raster that comes from data collected by the National Oceanic and Atmospheric Association (National Oceanic and Atmospheric Association (NOAA) 2018). There are a total of five layers, one for each year from 2008 through 2012. The values in each grid cell correspond to the grid cell’s mean sea surface temperature that year.
+For temperature, we will use a stacked 1 km by 1 km gridded raster with data collected by the National Oceanic and Atmospheric Association (National Oceanic and Atmospheric Association (NOAA) 2018). There are a total of five layers, one for each year from 2008 through 2012. The values in each grid cell correspond to the area’s mean sea surface temperature for that year.
 ```{r}
 # Store list of SST tif files
 sst_files <- list.files(here("data"), pattern = "\\d\\.tif$", full.names = TRUE)
@@ -96,7 +96,7 @@ cat("CRS is same across all data?:", compareCRS(eez, sst_stacked, depth))
 ```
 
 ## Oyster suitability analysis
-Now that we have processed the data, we can move on to figuring out where oyster aquaculture is suitable in West Coast EEZs. Oysters generally reside in waters with a sea surface temperature of 11 to 30 degrees Celsius and at a depth of 0 to 70 meters below sea level (Froese and Pauly 2023). Thus, we will use these ranges to build a suitability mask raster and then crop to only include areas in West Coast EEZs.
+Now that we have processed the data, we can move on to figuring out where oyster aquaculture is suitable in West Coast EEZs. Oysters generally reside in waters with a sea surface temperature of 11 to 30 degrees Celsius and at a depth of 0 to 70 meters below sea level (Froese and Pauly 2023). Thus, we will use these ranges to build a suitability raster and then crop to only include areas in West Coast EEZs.
 
 #### Create suitability mask
 ```{r}
@@ -140,7 +140,7 @@ eez_raster <- rasterize(eez, oyster_mask)
 ```
 
 #### Calculate total and percent suitable area for each EEZ
-To calculate total and percent suitable area for each EEZ, we use the zonal() function from the raster package. This function allows us to calculate the sum of suitable grid cells within each EEZ, as our EEZ raster labels each grid cell as part of one of the five West Coast EEZs.
+To calculate total and percent suitable area for each EEZ, we use the zonal() function from the raster package in R. This function allows us to calculate the sum of suitable grid cells within each EEZ, as our EEZ raster labels each grid cell as part of one of the five West Coast EEZs.
 ```{r}
 # Calculate total suitable area within each EEZ
 total_suitable_area <- raster::zonal(cell_areas_raster, eez_raster, fun = sum, na.rm = TRUE)
@@ -307,7 +307,7 @@ suitable_aqua("Common carp", tempmin=3, tempmax=35, depthmin=0, depthmax=29)
 ## Conclusion
 The main takeaway from this analysis is that we were able to build a model that helps us better understand which West Coast EEZs are best suited for marine aquaculture of certain species based on ideal ranges for sea surface temperature and depth. To demonstrate how this model could be used, this analysis looked at suitability for oysters and the Common carp. Specifically, our comparison showed that having a larger temperature range (3-35 degrees Celsius for carp compared to 11-30 degrees Celsius for oysters) was more important for suitability than having a narrower depth range (0-29 meters for carp compared to 0-70 meters for oysters).
 
-This being said, there are certainly limitations in using our model. For one, using a sea surface temperature raster with finer resolution would give us more precise estimates. In addition, this analysis did not look at where marine aquaculture currently exists on the West Coast. This model could be improved upon by subtracting areas that already being used for marine aquaculture. Lastly, a more robust model would look at more variables than just sea surface temperature and depth. Further analysis might include additional water variables with conditional ranges for different species, such as degree hardness (dH) and potential of hydrogen (pH).
+This being said, there are certainly limitations in using our model. For one, using a sea surface temperature raster with finer resolution would give us more precise estimates. In addition, this analysis did not look at where marine aquaculture currently exists on the West Coast. This model could be improved upon by subtracting areas that are already being used for marine aquaculture. Lastly, a more robust model would look at more variables than just sea surface temperature and depth. Further analysis might include additional water variables with conditional ranges for different species, such as degree hardness (dH) and potential of hydrogen (pH).
 
 ## References
 - Costello, Christopher, Ling Cao, Stefan Gelcich, Miguel Á. Cisneros-Mata, Christopher M. Free, Halley E. Froehlich, Christopher D. Golden, et al. 2020. “The Future of Food from the Sea.” Nature 588 (7836): 95–100. https://doi.org/10.1038/s41586-020-2616-y.
