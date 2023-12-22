@@ -33,7 +33,7 @@ library(spData)
 ```
 
 ## Read in data
-#### Sea surface temperature TIF files
+#### 2008-2012 global sea surface temperature TIFs (1 km grid cells)
 For temperature, we will use a stacked 1 km by 1 km gridded raster with data collected by the National Oceanic and Atmospheric Association (National Oceanic and Atmospheric Association (NOAA) 2018). There are a total of five layers, one for each year from 2008 through 2012. The values in each grid cell correspond to the area’s mean sea surface temperature for that year.
 ```{r}
 # Store list of SST tif files
@@ -67,7 +67,7 @@ mean_sst <- mean(sst_stacked, na.rm = TRUE)
 mean_sst <- mean_sst - 273.15
 ```
 
-#### Bathymetry raster
+#### 2022 global Bathymetry TIF (1 meter grid cells)
 The bathymetry raster that we will be using characterizes ocean depth at a spatial resolution of one meter grid cells. We get this data from the General Bathymetric Chart of the Oceans (General Bathymetric Chart of the Oceans (GEBCO) 2023).
 ```{r}
 # Load bathymetry raster
