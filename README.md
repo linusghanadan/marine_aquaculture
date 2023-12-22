@@ -4,6 +4,9 @@ This analysis seeks to build on knowledge regarding the potential for marine aqu
 
 ## Repository contents
     marine_aquaculture
+    └───images
+        │   output for oyster suitability parameters: oyster.png
+        │   output for Common carp suitability parameters: carp.png
     │   README.md
     │   .gitignore
     │   .Rmd
