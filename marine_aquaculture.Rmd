@@ -12,11 +12,11 @@ knitr::opts_chunk$set(include = TRUE, message = FALSE, warning = FALSE)
 
 ## Purpose
 
-Marine aquaculture has the potential to be an important solution to meet the future demand for protein-rich food while simultaneously ensuring environmental sustainability (Costello et al. 2020). Increases in the demand for seafood have already resulted in an industry shift from wild fisheries to terrestrial aquaculture, with farmed seafood products currently making up about 50% of the global seafood supply. However, concerns about the sustainability of further expanding terrestrial aquaculture suggest that increasing the development of marine aquaculture farms might play a substantial role in a comprehensive solution.
+Marine aquaculture has the potential to be an important solution to meet the future demand for protein-rich food while simultaneously ensuring environmental sustainability [@costello_future_2020]. Increases in the demand for seafood have already resulted in an industry shift from wild fisheries to terrestrial aquaculture, with farmed seafood products currently making up about 50% of the global seafood supply. However, concerns about the sustainability of further expanding terrestrial aquaculture suggest that increasing the development of marine aquaculture farms might play a substantial role in a comprehensive solution.
 
-Furthermore, the U.S. West Coast represents an area where such marine aquaculture expansion could take place. In fact, the State of Washington currently leads the nation in marine aquaculture development. From 2005 to 2018, Washington generated over $200 million from these sea-based farms, about 40% of nationwide revenue during that same period (Froehlich et al. 2022).
+Furthermore, the U.S. West Coast represents an area where such marine aquaculture expansion could take place. In fact, the State of Washington currently leads the nation in marine aquaculture development. From 2005 to 2018, Washington generated over \$200 million from these sea-based farms, about 40% of nationwide revenue during that same period [@froehlich_piecing_2022].
 
-This analysis seeks to build on knowledge regarding the potential for marine aquaculture expansion in the four Exclusive Economic Zones (EEZs) adjacent to the U.S. West Coast. Using raster data on mean sea surface temperature and depth, I’ll estimate the total and percent area within each of these four EEZs that would be suitable for oyster aquaculture. After visualizing oyster suitability, I’ll create a generalized model that can be used for any species based on their ideal temperature and depth ranges.
+This analysis seeks to build on knowledge regarding the potential for marine aquaculture expansion in the four Exclusive Economic Zones (EEZs) adjacent to the U.S. West Coast. Using raster data on mean sea surface temperature and depth, I'll estimate the total and percent area within each of these four EEZs that would be suitable for oyster aquaculture. After visualizing oyster suitability, I'll create a generalized model that can be used for any species based on their ideal temperature and depth ranges.
 
 
 
@@ -34,7 +34,7 @@ library(spData)
 
 ## Read in data
 #### 2008-2012 global sea surface temperature TIFs (1 km grid cells)
-For temperature, we will use a stacked 1 km by 1 km gridded raster with data collected by the National Oceanic and Atmospheric Association (National Oceanic and Atmospheric Association (NOAA) 2018). There are a total of five layers, one for each year from 2008 through 2012. The values in each grid cell correspond to the area’s mean sea surface temperature for that year.
+For temperature, we will use a stacked 1 km by 1 km gridded raster with data collected by the National Oceanic and Atmospheric Association [@national_oceanic_and_atmospheric_association_noaa_daily_2018]. There are a total of five layers, one for each year from 2008 through 2012. The values in each grid cell correspond to the area's mean sea surface temperature for that year.
 ```{r}
 # Store list of SST tif files
 sst_files <- list.files(here("data"), pattern = "\\d\\.tif$", full.names = TRUE)
@@ -68,7 +68,7 @@ mean_sst <- mean_sst - 273.15
 ```
 
 #### 2022 global Bathymetry TIF (1 meter grid cells)
-The bathymetry raster that we will be using characterizes ocean depth at a spatial resolution of one meter grid cells. We get this data from the General Bathymetric Chart of the Oceans (General Bathymetric Chart of the Oceans (GEBCO) 2023).
+The bathymetry raster that we will be using characterizes ocean depth at a spatial resolution of 1 meter grid cells. We get this data from the General Bathymetric Chart of the Oceans [@general_bathymetric_chart_of_the_oceans_gebco_gridded_2023].
 ```{r}
 # Load bathymetry raster
 depth <- raster(here("data/depth.tif"))
@@ -86,7 +86,7 @@ tryCatch({
 ```
 
 #### Shapefile for West Coast EEZs
-This data comes from Marine Regions, which is managed by the Flanders Marine Institute (Marine Regions, n.d.).
+This data comes from Marine Regions, which is managed by the Flanders Marine Institute [@marine_regions_eez_nodate].
 ```{r}
 # Load shapefile for West Coast EEZ
 eez <- st_read(here("data/wc_regions_clean.shp"))
@@ -96,7 +96,7 @@ cat("CRS is same across all data?:", compareCRS(eez, sst_stacked, depth))
 ```
 
 ## Oyster suitability analysis
-Now that we have processed the data, we can move on to figuring out where oyster aquaculture is suitable in West Coast EEZs. Oysters generally reside in waters with a sea surface temperature of 11 to 30 degrees Celsius and at a depth of 0 to 70 meters below sea level (Froese and Pauly 2023). Thus, we will use these ranges to build a suitability raster and then crop to only include areas in West Coast EEZs.
+Now that we have processed the data, we can move on to figuring out where oyster aquaculture is suitable in West Coast EEZs. Oysters generally reside in waters with a sea surface temperature of 11 to 30 degrees Celsius and at a depth of 0 to 70 meters below sea level [@froese_fishbase_2023]. Thus, we will use these ranges to build a suitability raster and then crop to only include areas in West Coast EEZs.
 
 #### Create suitability mask
 ```{r}
@@ -140,7 +140,7 @@ eez_raster <- rasterize(eez, oyster_mask)
 ```
 
 #### Calculate total and percent suitable area for each EEZ
-To calculate total and percent suitable area for each EEZ, we use the zonal() function from the raster package in R. This function allows us to calculate the sum of suitable grid cells within each EEZ, as our EEZ raster labels each grid cell as part of one of the five West Coast EEZs.
+To calculate total and percent suitable area for each EEZ, we use the *zonal()* function from the raster package in R. This function allows us to calculate the sum of suitable grid cells within each EEZ, as our EEZ raster labels each grid cell as part of one of the five West Coast EEZs.
 ```{r}
 # Calculate total suitable area within each EEZ
 total_suitable_area <- raster::zonal(cell_areas_raster, eez_raster, fun = sum, na.rm = TRUE)
@@ -298,11 +298,13 @@ suitable_aqua <- function(species, tempmin, tempmax, depthmin, depthmax) {
 ```
 
 #### Use function to analyze suitable area for Common carp
-Compared to oysters, the Common carp can handle slightly more extreme temperatures (3 to 35 degrees Celsius) (Froese and Pauly 2023). However, unlike oysters who thrive in depths of up to 70 meters below sea level, the Common carp can only handle up to 29 meters. We can apply our generalized function to see what this means in term of how suitability differs for the Common carp.
+Compared to oysters, the Common carp can handle slightly more extreme temperatures (3 to 35 degrees Celsius) [@froese_fishbase_2023]. However, unlike oysters who thrive in depths of up to 70 meters below sea level, the Common carp can only handle up to 29 meters. We can apply our generalized function to see what this means in term of how suitability differs for the Common carp.
 ```{r}
 # Run function for Common carp species
 suitable_aqua("Common carp", tempmin=3, tempmax=35, depthmin=0, depthmax=29)
 ```
+
+The two maps are very similar in terms of how the different EEZs compare to each other, but a closer inspection of the legend values does show us that the Common carp has a consistently higher amount of suitable area. Hence, the larger temperature range was more important for suitability than the narrower depth range.
 
 ## Conclusion
 The main takeaway from this analysis is that we were able to build a model that helps us better understand which West Coast EEZs are best suited for marine aquaculture of certain species based on ideal ranges for sea surface temperature and depth. To demonstrate how this model could be used, this analysis looked at suitability for oysters and the Common carp. Specifically, our comparison showed that having a larger temperature range (3-35 degrees Celsius for carp compared to 11-30 degrees Celsius for oysters) was more important for suitability than having a narrower depth range (0-29 meters for carp compared to 0-70 meters for oysters).
